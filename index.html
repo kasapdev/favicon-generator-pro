@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08090d">
+  <meta name="description" content="Generate a complete favicon set (16px to 512px, apple-touch-icon, manifest.json) from one image, entirely client-side — no uploads, no backend.">
+  <title>Favicon Generator Pro — Web Utility Suite</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <header class="topbar container">
+    <a class="brand" href="https://github.com/kasapdev/favicon-generator-pro" aria-label="Favicon Generator Pro">
+      <span class="logo" aria-hidden="true">
+        <!-- image / picture icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <path d="M21 15l-5-5L5 21"/>
+        </svg>
+      </span>
+      <span class="col" style="gap:0">
+        <span>Favicon Generator Pro</span>
+        <span class="sub">Web Utility Suite</span>
+      </span>
+    </a>
+    <span class="spacer"></span>
+
+    <button class="btn btn--icon" data-shortcut-help title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="2" y="4" width="20" height="16" rx="2"/>
+        <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M7 16h10"/>
+      </svg>
+    </button>
+    <button class="btn btn--icon" data-theme-toggle title="Toggle theme" aria-label="Toggle theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="4"/>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+      </svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/>
+      </svg>
+    </button>
+  </header>
+
+  <main class="container">
+    <!-- Upload / source panel -->
+    <section class="panel upload-panel fade-in" aria-label="Source image">
+      <div id="dropZone" class="dropzone" tabindex="0" role="button" aria-label="Upload a source image">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+        </svg>
+        <p class="dropzone-title">Drag &amp; drop an image here</p>
+        <p class="muted">or click to browse — PNG, JPG, WEBP, SVG, GIF, BMP</p>
+        <input type="file" id="fileInput" accept="image/png,image/jpeg,image/webp,image/svg+xml,image/gif,image/bmp,image/*" hidden>
+      </div>
+
+      <div id="sourcePreview" class="source-preview" hidden>
+        <div class="source-preview-img-wrap checker">
+          <img id="sourceImg" alt="Source image preview">
+        </div>
+        <div class="source-meta col gap-3">
+          <div class="row gap-2 wrap">
+            <span id="sourceDims" class="badge mono">0 × 0</span>
+            <span id="sourceFileInfo" class="badge mono">—</span>
+          </div>
+          <div class="row gap-2 wrap">
+            <button id="btnGenerate" class="btn btn--primary" title="Generate all sizes (Ctrl/Cmd+G)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+              Generate all
+            </button>
+            <button id="btnChangeImage" class="btn btn--sm" title="Choose a different image">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 8l-5-5-5 5M12 3v12M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg>
+              Change image
+            </button>
+            <button id="btnClear" class="btn btn--sm btn--ghost" title="Clear everything">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+              Clear
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Generated sizes -->
+    <section id="sizesSection" class="panel sizes-panel rise" aria-label="Generated favicon sizes" hidden>
+      <div class="panel-head-row">
+        <h2>Generated sizes</h2>
+        <span class="muted" style="font-size:13px">Square-cropped &amp; resized from your source image</span>
+      </div>
+      <div id="sizesGrid" class="sizes-grid"></div>
+    </section>
+
+    <!-- Export snippets -->
+    <section id="exportSection" class="grid export-grid rise" aria-label="Export snippets" hidden>
+      <div class="panel export-panel">
+        <div class="panel-head-row">
+          <h2>manifest.json</h2>
+          <button id="btnCopyManifest" class="btn btn--sm">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy
+          </button>
+        </div>
+        <div class="field" style="margin-bottom:var(--space-3)">
+          <label for="appNameInput">App name</label>
+          <input type="text" id="appNameInput" value="My App" maxlength="60" autocomplete="off">
+        </div>
+        <pre id="manifestOutput" class="mono code-block"></pre>
+      </div>
+
+      <div class="panel export-panel">
+        <div class="panel-head-row">
+          <h2>&lt;head&gt; snippet</h2>
+          <button id="btnCopyHtml" class="btn btn--sm">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy
+          </button>
+        </div>
+        <p class="muted" style="margin:0 0 var(--space-3);font-size:13px">Paste this into your page's <code>&lt;head&gt;</code>. Upload the downloaded PNGs and manifest alongside your HTML.</p>
+        <pre id="htmlSnippetOutput" class="mono code-block"></pre>
+      </div>
+    </section>
+
+    <!-- Empty state hint (shown only while no image is loaded, below dropzone) -->
+    <section id="emptyHint" class="empty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="3" y="3" width="18" height="18" rx="2"/>
+        <circle cx="8.5" cy="8.5" r="1.5"/>
+        <path d="M21 15l-5-5L5 21"/>
+      </svg>
+      <p>Upload a square-ish image to generate a complete favicon set — 16px up to 512px, apple-touch-icon, and a manifest.json.</p>
+    </section>
+  </main>
+
+  <footer class="app-footer container">
+    Part of the <a href="https://github.com/kasapdev/favicon-generator-pro">Favicon Generator Pro</a> · MIT Licensed
+  </footer>
+
+  <!-- Shortcuts help modal -->
+  <div id="helpBackdrop" class="modal-backdrop" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+      <div class="row between center" style="margin-bottom:var(--space-4)">
+        <h3 id="helpTitle" style="margin:0">Keyboard shortcuts</h3>
+        <button id="helpClose" class="btn btn--icon btn--ghost" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <table class="shortcut-table">
+        <tbody id="shortcutRows"></tbody>
+      </table>
+      <p class="muted" style="margin:var(--space-4) 0 0;font-size:13px">Tip: <kbd>mod</kbd> means <kbd>Ctrl</kbd> on Windows/Linux and <kbd>⌘</kbd> on macOS.</p>
+    </div>
+  </div>
+
+  <script src="assets/js/core.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
