@@ -1,6 +1,6 @@
 # Favicon Generator Pro
 
-[![CI](https://github.com/kasapdev/favicon-generator-pro/actions/workflows/ci.yml/badge.svg)](https://github.com/kasapdev/favicon-generator-pro/actions/workflows/ci.yml)
+[![CI](https://github.com/kasapdev/favicon-generator-pro/actions/workflows/ci.yml/badge.svg)](https://github.com/kasapdev/favicon-generator-pro/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) ![Vanilla JS](https://img.shields.io/badge/Vanilla-JS-F7DF1E?logo=javascript&logoColor=black)
 
 Generate a complete favicon set — 16px to 512px, apple-touch-icon, and a manifest.json — from one image, entirely in your browser.
 
