@@ -252,6 +252,16 @@
     var w = img.naturalWidth || img.width;
     var h = img.naturalHeight || img.height;
 
+    // Invalidate any sizes generated for a *previous* image before kicking off
+    // generation for this one. Without this, picking a new image via "Change
+    // image" leaves the old PNG Blobs in place — with their Download buttons
+    // still enabled — until each size's async canvas.toBlob() callback
+    // resolves, so a click during that window silently downloads the
+    // previous image's icon instead of the new one.
+    sizeBlobs = new Array(SIZE_DEFS.length);
+    sizeInfoEls.forEach(function (el, i) { el.textContent = defaultInfoText(SIZE_DEFS[i]); });
+    sizeDownloadBtns.forEach(function (btn) { btn.disabled = true; });
+
     sourceImg.src = dataUrl;
     sourceDims.textContent = w + ' × ' + h;
     sourceFileInfo.textContent = (file.name || 'image') + ' · ' + humanBytes(file.size || 0);
